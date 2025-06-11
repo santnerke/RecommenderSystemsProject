@@ -5,36 +5,53 @@ import os
 json_folder = "./extracted_content_ml-latest"
 moviedata = "./ml-latest-small/movies.csv"
 
-def filmDescripiton_byID(film_id):
-    pfad = os.path.join(json_folder, f"{film_id}.json")
+def load_movies():
+    data = []
+    with open(moviedata, "r", encoding="utf-8") as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            if len(line) < 2:
+                continue
+            movie_id = line[0].strip()
+            title = line[1].strip()
+            genre = line[2].strip() if len(line) > 2 else ""
+            description = movieDescripiton_byID(movie_id)
+            actor = movieActor_byID(movie_id)
+            daten.append({
+                "id": movie_id,
+                "title": title,
+                "genre": genre,
+                "description": description,
+                "actor": actor
+            })
+    return data
+
+def movieDescripiton_byID(movie_id):
+    path = os.path.join(json_folder, f"{movie_id}.json")
     try:
-        with open(pfad, "r", encoding="utf-8") as f:
-            daten = json.load(f)
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
             description = (
-                daten.get("movielens", {}).get("plotSummary") or
+                data.get("movielens", {}).get("plotSummary") or
                 "No description found"
             )
             return description
     except FileNotFoundError:
-        return "Datei nicht gefunden."
+        return "Data not found."
     except json.JSONDecodeError:
-        return "Ungültiges JSON-Format."
+        return "no JSON-Format."
 
-def lade_alle_beschreibungen():
-    daten = []
-    with open(moviedata, "r", encoding="utf-8") as csvfile:
-        reader = csv.reader(csvfile)
-        for zeile in reader:
-            if len(zeile) < 2:
-                continue
-            film_id = zeile[0].strip()
-            titel = zeile[1].strip()
-            genres = zeile[2].strip() if len(zeile) > 2 else ""
-            beschreibung = filmDescripiton_byID(film_id)
-            daten.append({
-                "id": film_id,
-                "titel": titel,
-                "genres": genres,
-                "beschreibung": beschreibung
-            })
-    return daten
+def movieActor_byID(movie_id):
+    path = os.path.join(json_folder, f"{movie_id}.json")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            description = (
+                data.get("movielens", {}).get("") or
+                "No description found"
+            )
+            return description
+    except FileNotFoundError:
+        return "Data not found."
+    except json.JSONDecodeError:
+        return "no JSON-Format."
