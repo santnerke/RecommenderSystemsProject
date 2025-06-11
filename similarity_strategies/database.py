@@ -47,7 +47,7 @@ def movieActor_byID(movie_id):
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
             description = (
-                data.get("movielens", {}).get("") or
+                data.get("movielens", {}).get("actors") or
                 "No description found"
             )
             return description
