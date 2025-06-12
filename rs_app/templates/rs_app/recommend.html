@@ -13,3 +13,18 @@
     <li>{{ movie.title }} – shared actors: {{ movie.shared_actors }}</li>
   {% endfor %}
 </ul>
+
+<h3>TF-IDF Description Similarity:</h3>
+<ul>
+  {% for movie in description_recommendations %}
+    <li>{{ movie.title }} – similarity score: {{ movie.similarity|floatformat:2 }}</li>
+  {% endfor %}
+</ul>
+
+<h3>Embedding-Based Similarity:</h3>
+<ul>
+  {% for movie in embedding_recommendations %}
+    <li>{{ movie.title }} – similarity score: {{ movie.similarity|floatformat:2 }}</li>
+  {% endfor %}
+</ul>
+

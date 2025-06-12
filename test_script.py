@@ -3,10 +3,6 @@ from similarity_strategies.leadActorsBased import recommend_movies_by_lead_actor
 from similarity_strategies.genreMatching import recommend_movies_by_genre
 from similarity_strategies.embeddingBased import recommend_movies_by_embedding
 from similarity_strategies.descriptionMatching import recommend_movies_by_description
-from similarity_strategies.database import *
-
-movie_id = 2 #needs to come from GUI
-movies = load_movies()
 
 # test data
 df_movies = pd.DataFrame([
@@ -53,12 +49,6 @@ df_movies = pd.DataFrame([
         'lead_actors': ['xy']
     },
 ])
-
-recommend_movies_by_description(movie_id, movies)
-recommend_movies_by_embedding(movie_id, movies)
-
-similar_lead_actor = recommend_movies_by_lead_actors(movie_id, df_movies)
-similar_genre = recommend_movies_by_genre(movie_id, df_movies)
 
 print(f"======= similar lead actors =======")
 for movie in similar_lead_actor:
