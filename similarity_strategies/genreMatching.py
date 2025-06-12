@@ -8,10 +8,13 @@ def recommend_movies_by_genre(movie_id, df_movies, top_n=5):
     similarity_scores = []
 
     for _, row in df_movies.iterrows():
+        # skip reference movie
         if row['movieId'] == movie_id:
             continue
 
+        # convert genres of current movie to a set
         genres = set(row['genres'].split('|'))
+        # find common genres with the reference movie
         shared_genres = ref_genres.intersection(genres)
         score = len(shared_genres)
 

@@ -1,10 +1,25 @@
 from django.shortcuts import render
 
 # Create your views here.
+
 from django.shortcuts import render
 from similarity_strategies.genreMatching import recommend_movies_by_genre
-from similarity_strategies.leadActors import recommend_movies_by_lead_actors
+from similarity_strategies.leadActorsBased import recommend_movies_by_lead_actors
 import pandas as pd
+
+def index(request):
+    return render(request, 'rs_app/index.html')
+
+def recommend(request):
+    movie_id = int(request.GET.get('movie_id'))
+    genre_recs = recommend_movies_by_genre(movie_id, df_movies)
+    actor_recs = recommend_movies_by_lead_actors(movie_id, df_movies)
+
+    return render(request, 'rs_app/recommend.html', {
+        'genre_recommendations': genre_recs,
+        'actor_recommendations': actor_recs,
+        'movie_id': movie_id,
+    })
 
 # test data
 df_movies = pd.DataFrame([
@@ -51,18 +66,3 @@ df_movies = pd.DataFrame([
         'lead_actors': ['xy']
     },
 ])
-
-def index(request):
-    return render(request, 'rs_app/index.html')
-
-def recommend(request):
-    movie_id = int(request.GET.get('movie_id'))
-    genre_recs = recommend_movies_by_genre(movie_id, df_movies)
-    actor_recs = recommend_movies_by_lead_actors(movie_id, df_movies)
-
-    return render(request, 'rs_app/recommend.html', {
-        'genre_recommendations': genre_recs,
-        'actor_recommendations': actor_recs,
-        'movie_id': movie_id,
-    })
-

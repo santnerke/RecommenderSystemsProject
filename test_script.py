@@ -1,5 +1,5 @@
 import pandas as pd
-from similarity_strategies.leadActors import recommend_movies_by_lead_actors
+from similarity_strategies.leadActorsBased import recommend_movies_by_lead_actors
 from similarity_strategies.genreMatching import recommend_movies_by_genre
 from similarity_strategies.embeddingBased import recommend_movies_by_embedding
 from similarity_strategies.descriptionMatching import recommend_movies_by_description
