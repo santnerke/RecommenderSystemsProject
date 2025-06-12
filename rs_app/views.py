@@ -1,12 +1,10 @@
-import pandas as pd
-from similarity_strategies.leadActors import recommend_movies_by_lead_actors
-from similarity_strategies.genreMatching import recommend_movies_by_genre
-from similarity_strategies.embeddingBased import recommend_movies_by_embedding
-from similarity_strategies.descriptionMatching import recommend_movies_by_description
-from similarity_strategies.database import *
+from django.shortcuts import render
 
-movie_id = 2 #needs to come from GUI
-movies = load_movies()
+# Create your views here.
+from django.shortcuts import render
+from similarity_strategies.genreMatching import recommend_movies_by_genre
+from similarity_strategies.leadActors import recommend_movies_by_lead_actors
+import pandas as pd
 
 # test data
 df_movies = pd.DataFrame([
@@ -54,16 +52,17 @@ df_movies = pd.DataFrame([
     },
 ])
 
-recommend_movies_by_description(movie_id, movies)
-recommend_movies_by_embedding(movie_id, movies)
+def index(request):
+    return render(request, 'rs_app/index.html')
 
-similar_lead_actor = recommend_movies_by_lead_actors(movie_id, df_movies)
-similar_genre = recommend_movies_by_genre(movie_id, df_movies)
+def recommend(request):
+    movie_id = int(request.GET.get('movie_id'))
+    genre_recs = recommend_movies_by_genre(movie_id, df_movies)
+    actor_recs = recommend_movies_by_lead_actors(movie_id, df_movies)
 
-print(f"======= similar lead actors =======")
-for movie in similar_lead_actor:
-    print(f"{movie['title']} – shared actors: {', '.join(movie['shared_actors'])}")
+    return render(request, 'rs_app/recommend.html', {
+        'genre_recommendations': genre_recs,
+        'actor_recommendations': actor_recs,
+        'movie_id': movie_id,
+    })
 
-print(f"======= similar genre =======")
-for movie in similar_genre:
-    print(f"{movie['title']} - same genres: {movie['shared_genres']})")

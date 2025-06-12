@@ -1,0 +1,15 @@
+<h2>Recommendations for Movie id: {{ movie_id }}</h2>
+
+<h3>Genre:</h3>
+<ul>
+  {% for movie in genre_recommendations %}
+    <li>{{ movie.title }} – shared genres: {{ movie.shared_genres }}</li>
+  {% endfor %}
+</ul>
+
+<h3>Lead Actors:</h3>
+<ul>
+  {% for movie in actor_recommendations %}
+    <li>{{ movie.title }} – shared actors: {{ movie.shared_actors }}</li>
+  {% endfor %}
+</ul>

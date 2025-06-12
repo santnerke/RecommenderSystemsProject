@@ -1,6 +1,7 @@
 from sentence_transformers import SentenceTransformer, util
 import torch
-from .database import filmDescripiton_byID
+from .database import filmDescripiton_byID, movieDescripiton_byID
+
 
 def recommend_movies_by_embedding(id, movies):
     model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -19,7 +20,7 @@ def recommend_movies_by_embedding(id, movies):
 
     top_results = torch.topk(cosine_scores, k=5)
 
-    print("\nBy Embedding\n)
+    print("\nBy Embedding\n")
     print("Top matches:")
     for score, idx in zip(top_results[0], top_results[1]):
         print(f"{score:.2f} – {descriptions[idx]}")
