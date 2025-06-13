@@ -10,21 +10,29 @@ from similarity_strategies.embeddingBased import recommend_movies_by_embedding
 import pandas as pd
 
 def index(request):
-    return render(request, 'rs_app/index.html')
+    movies = df_movies[['movieId', 'title']].to_dict(orient='records')
+    return render(request, 'rs_app/index.html', {'movies': movies})
 
 def recommend(request):
     movie_id = int(request.GET.get('movie_id'))
+    # Find movie details by id
+    movie = df_movies[df_movies['movieId'] == movie_id]
+    if movie.empty:
+        return render(request, 'rs_app/error.html', {'message': 'Movie not found.'})
+    movie = movie.iloc[0]
+
     genre_recs = recommend_movies_by_genre(movie_id, df_movies)
     actor_recs = recommend_movies_by_lead_actors(movie_id, df_movies)
     desc_recs = recommend_movies_by_description(movie_id, df_movies)
     embe_recs = recommend_movies_by_embedding(movie_id, df_movies)
 
+    # Pass movie + recommendations to template
     return render(request, 'rs_app/recommend.html', {
+        'movie': movie,
         'genre_recommendations': genre_recs,
         'actor_recommendations': actor_recs,
         'description_recommendations': desc_recs,
         'embedding_recommendations': embe_recs,
-        'movie_id': movie_id,
     })
 
 # test data

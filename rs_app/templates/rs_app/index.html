@@ -1,4 +1,24 @@
-<form method="get" action="{% url 'recommend' %}">
-    <input type="number" name="movie_id" placeholder="Movie Id:">
-    <button type="submit">Recommend</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Movie Recommendation</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 20px; }
+      select, button { font-size: 1rem; padding: 8px; margin-top: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Select a Movie to Get Recommendations</h1>
+    <form method="get" action="{% url 'recommend' %}">
+        <label for="movie-select">Choose a movie:</label>
+        <select name="movie_id" id="movie-select" required>
+            <option value="" disabled selected>-- Select a movie --</option>
+            {% for movie in movies %}
+              <option value="{{ movie.movieId }}">{{ movie.title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Recommend</button>
+    </form>
+</body>
+</html>
