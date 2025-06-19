@@ -91,5 +91,27 @@
             {% endfor %}
         </ul>
     </div>
+
+    <div class="section">
+        <h2>Recommendations by Duration</h2>
+        <ul>
+            {% for m in duration_recommendations %}
+                <li>{{ m.title }} – duration difference: {{ m.duration_diff }} min</li>
+            {% empty %}
+                <li>No recommendations found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Recommendations by Release Year</h2>
+        <ul>
+            {% for m in year_recommendations %}
+                <li>{{ m.title }} – same year: {{ m.year }}</li>
+            {% empty %}
+                <li>No recommendations found.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
