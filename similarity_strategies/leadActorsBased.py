@@ -16,7 +16,6 @@ def recommend_movies_by_lead_actors(movie_id, movie_list, top_n=5):
 
         actors = movie.get('actors') or []
         lead_actors = set(actors[:3])
-        print(lead_actors)
 
         shared = ref_lead_actors.intersection(lead_actors)
 
