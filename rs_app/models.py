@@ -8,4 +8,3 @@ class Movie(models.Model):
     release_year = models.IntegerField(null=True, blank=True)
     duration = models.IntegerField(null=True, blank=True)
     plot_summary = models.TextField(blank=True, null=True)
-    backdrop_path = models.URLField(blank=True, null=True)

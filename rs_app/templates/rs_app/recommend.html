@@ -39,9 +39,11 @@
     </style>
 </head>
 <body>
+    {% load static %}
     <a href="{% url 'index' %}" class="back-link">&larr; Back to movie selection</a>
 
     <h1>{{ movie.title }}</h1>
+    <img src="{% static 'movie_posters/' %}{{ movie.id }}.jpg" alt="{{ movie.title }} poster" style="max-width: 300px; margin-bottom: 1rem;" />
     <p class="genres">Genres: {{ movie.genres }}</p>
     <p><strong>Lead actors:</strong> {{ movie.actors |join:", " }}</p>
     <div class="movie-description">

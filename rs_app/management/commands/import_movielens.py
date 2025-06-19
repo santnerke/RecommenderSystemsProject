@@ -37,10 +37,6 @@ class Command(BaseCommand):
                         'actors': movielens.get("actors"),
                         'plot_summary': movielens.get("plotSummary"),
                         'duration': movielens.get("runtime"),
-                        'backdrop_path': (
-                            f"https://image.tmdb.org/t/p/original{movielens['backdrop_path']}"
-                            if movielens.get("backdrop_path") else None
-                        )
                     }
                 )
 
