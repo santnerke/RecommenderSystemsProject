@@ -13,9 +13,10 @@ def recommend_movies_by_embedding(movie_id, movies_list, top_k=5):
     # Load sentence transformer model
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
-    # Extract all descriptions and titles from dataframe
+    # Extract all descriptions, titles, and ids from list
     descriptions = [m.get('plot_summary') or '' for m in movies_list]
     titles = [m.get('title') or '' for m in movies_list]
+    ids = [m.get('id') for m in movies_list]
 
     try:
         # Get description for the given movie_id
@@ -42,10 +43,11 @@ def recommend_movies_by_embedding(movie_id, movies_list, top_k=5):
     # Get top-k movies with highest similarity scores
     top_results = torch.topk(cosine_scores, k=top_k)
 
-    # Build recommendations list with title, similarity score, and description
+    # Build recommendations list with title, similarity score, description, and id
     recommendations = []
     for score, idx in zip(top_results[0], top_results[1]):
         recommendations.append({
+            'id': ids[idx],  # added id here
             'title': titles[idx],
             'similarity': float(score),
             'description': descriptions[idx]

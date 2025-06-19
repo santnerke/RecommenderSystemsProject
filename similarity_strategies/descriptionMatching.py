@@ -33,6 +33,7 @@ def recommend_movies_by_description(movie_id, movies_list, top_k=5):
     recommendations = []
     for idx in top_indices:
         recommendations.append({
+            'id': ids[idx],
             'title': titles[idx],
             'similarity': float(similarities[idx]),
             'description': descriptions[idx]

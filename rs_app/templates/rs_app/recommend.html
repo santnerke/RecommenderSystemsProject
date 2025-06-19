@@ -52,9 +52,12 @@
 
     <div class="section">
         <h2>Recommendations by Genre</h2>
-        <ul>
+        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in genre_recommendations %}
-                <li>{{ m.title }} – shared genres: {{ m.shared_genres }}</li>
+                <li style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                    <span>{{ m.title }} – shared genres: {{ m.shared_genres }}</span>
+                </li>
             {% empty %}
                 <li>No recommendations found.</li>
             {% endfor %}
@@ -63,9 +66,12 @@
 
     <div class="section">
         <h2>Recommendations by Lead Actors</h2>
-        <ul>
+        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in actor_recommendations %}
-                <li>{{ m.title }} – shared actors: {{ m.shared_actors }}</li>
+                <li style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                    <span>{{ m.title }} – shared actors: {{ m.shared_actors }}</span>
+                </li>
             {% empty %}
                 <li>No recommendations found.</li>
             {% endfor %}
@@ -74,9 +80,12 @@
 
     <div class="section">
         <h2>Recommendations by Description Similarity</h2>
-        <ul>
+        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in description_recommendations %}
-                <li>{{ m.title }} – similarity score: {{ m.similarity|floatformat:2 }}</li>
+                <li style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                    <span>{{ m.title }} – similarity score: {{ m.similarity|floatformat:2 }}</span>
+                </li>
             {% empty %}
                 <li>No recommendations found.</li>
             {% endfor %}
@@ -85,9 +94,12 @@
 
     <div class="section">
         <h2>Recommendations by Embedding Similarity</h2>
-        <ul>
+        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in embedding_recommendations %}
-                <li>{{ m.title }} – similarity score: {{ m.similarity|floatformat:2 }}</li>
+                <li style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                    <span>{{ m.title }} – similarity score: {{ m.similarity|floatformat:2 }}</span>
+                </li>
             {% empty %}
                 <li>No recommendations found.</li>
             {% endfor %}
@@ -96,9 +108,12 @@
 
     <div class="section">
         <h2>Recommendations by Duration</h2>
-        <ul>
+        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in duration_recommendations %}
-                <li>{{ m.title }} – duration difference: {{ m.duration_diff }} min</li>
+                <li style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                    <span>{{ m.title }} – duration difference: {{ m.duration_diff }} min</span>
+                </li>
             {% empty %}
                 <li>No recommendations found.</li>
             {% endfor %}
@@ -107,9 +122,12 @@
 
     <div class="section">
         <h2>Recommendations by Release Year</h2>
-        <ul>
+        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in year_recommendations %}
-                <li>{{ m.title }} – same year: {{ m.release_year }}</li>
+                <li style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                    <span>{{ m.title }} – same year: {{ m.release_year }}</span>
+                </li>
             {% empty %}
                 <li>No recommendations found.</li>
             {% endfor %}
