@@ -1,154 +1,44 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Movie  # Your movie model
 from similarity_strategies.genreMatching import recommend_movies_by_genre
 from similarity_strategies.leadActorsBased import recommend_movies_by_lead_actors
 from similarity_strategies.descriptionMatching import recommend_movies_by_description
 from similarity_strategies.embeddingBased import recommend_movies_by_embedding
 from similarity_strategies.releaseYearMatching import recommend_movies_by_year
 from similarity_strategies.durationBased import recommend_movies_by_duration
-import pandas as pd
 
 def index(request):
-    movies = df_movies[['movieId', 'title']].to_dict(orient='records')
+    movies = Movie.objects.all().values('id', 'title').order_by('title')
     return render(request, 'rs_app/index.html', {'movies': movies})
 
 def recommend(request):
-    movie_id = int(request.GET.get('movie_id'))
-    # Find movie details by id
-    movie = df_movies[df_movies['movieId'] == movie_id]
-    if movie.empty:
-        return render(request, 'rs_app/error.html', {'message': 'Movie not found.'})
-    movie = movie.iloc[0]
+    movie_id = request.GET.get('movie_id')
+    movie = get_object_or_404(Movie, id=movie_id)
 
-    genre_recs = recommend_movies_by_genre(movie_id, df_movies)
-    actor_recs = recommend_movies_by_lead_actors(movie_id, df_movies)
-    desc_recs = recommend_movies_by_description(movie_id, df_movies)
-    embe_recs = recommend_movies_by_embedding(movie_id, df_movies)
-    year_recs = recommend_movies_by_year(movie_id, df_movies)
-    dur_recs = recommend_movies_by_duration(movie_id, df_movies)
+    # You need to get all movies as a list or queryset for recommendation
+    movies = Movie.objects.all()
 
-    # Pass movie + recommendations to template
+    # Depending on how your recommendation functions are built,
+    # you might need to convert queryset to list/dict or dataframe.
+    # Here's a simplistic example converting to list of dicts:
+
+    movies_list = list(movies.values(
+        'id', 'title', 'genres', 'actors', 'release_year', 'duration', 'plot_summary'
+    ))
+
+    #genre_recs = recommend_movies_by_genre(movie.id, movies_list)
+    #actor_recs = recommend_movies_by_lead_actors(movie.id, movies_list)
+    desc_recs = recommend_movies_by_description(movie.id, movies_list)
+    embe_recs = recommend_movies_by_embedding(movie.id, movies_list)
+    #year_recs = recommend_movies_by_year(movie.id, movies_list)
+    #dur_recs = recommend_movies_by_duration(movie.id, movies_list)
+
     return render(request, 'rs_app/recommend.html', {
         'movie': movie,
-        'genre_recommendations': genre_recs,
-        'actor_recommendations': actor_recs,
+        #'genre_recommendations': genre_recs,
+        #'actor_recommendations': actor_recs,
         'description_recommendations': desc_recs,
         'embedding_recommendations': embe_recs,
-        'year_recommendations': year_recs,
-        'duration_recommendations': dur_recs,
+        #'year_recommendations': year_recs,
+        #'duration_recommendations': dur_recs,
     })
-
-# test data
-import pandas as pd
-
-df_movies = pd.DataFrame([
-    {
-        'movieId': 1,
-        'title': 'Toy Story (1995)',
-        'genres': 'Adventure|Animation|Children|Comedy|Fantasy',
-        'lead_actors': ['Tom Hanks', 'Tim Allen'],
-        'year': 1995,
-        'duration': 81,
-        'description': 'When young Andy leaves his room, his toys spring to life and embark on an epic journey. Woody, a cowboy doll, feels threatened by the arrival of Buzz Lightyear, a flashy new space ranger. As jealousy turns into friendship, the two must work together to reunite with Andy before it’s too late.'
-    },
-    {
-        'movieId': 2,
-        'title': 'Jumanji (1995)',
-        'genres': 'Adventure|Children|Fantasy',
-        'lead_actors': ['Robin Williams', 'Tim Allen'],
-        'year': 1995,
-        'duration': 104,
-        'description': 'After discovering a mysterious board game, two children accidentally release a man who has been trapped inside it for decades. As they continue playing, wild jungle creatures invade their town, and they must finish the game to restore order and send the magic back where it came from.'
-    },
-    {
-        'movieId': 356,
-        'title': 'Forrest Gump (1994)',
-        'genres': 'Comedy|Drama|Romance|War',
-        'lead_actors': ['Tom Hanks', 'Robin Wright'],
-        'year': 1994,
-        'duration': 142,
-        'description': 'Forrest Gump, a kind-hearted but simple man from Alabama, inadvertently becomes part of major historical events in America. With unwavering love for his childhood friend Jenny, Forrest shares his life story — filled with humor, heartbreak, and unexpected triumphs — from a bench in Savannah.'
-    },
-    {
-        'movieId': 4022,
-        'title': 'Cast Away (2000)',
-        'genres': 'Drama',
-        'lead_actors': ['Tom Hanks', 'Helen Hunt'],
-        'year': 2000,
-        'duration': 143,
-        'description': 'Chuck Noland, a FedEx systems engineer, is stranded on a deserted island after a plane crash. Isolated from the world, he must learn how to survive against the odds, confronting his fears, loneliness, and the ultimate challenge of returning to a life that has moved on without him.'
-    },
-    {
-        'movieId': 3,
-        'title': 'Grumpier Old Men (1995)',
-        'genres': 'Comedy|Romance',
-        'lead_actors': ['Walter Matthau', 'Jack Lemmon'],
-        'year': 1995,
-        'duration': 101,
-        'description': 'Retired neighbors Max and John are back with their lovable bickering and rivalry. When a spirited woman opens a new restaurant in town, the men’s friendship is tested once again as romance stirs between them and the women in their lives. A heartfelt, humorous tale about love later in life.'
-    },
-    {
-        'movieId': 9999999999,
-        'title': 'Test with Tom Hanks & Tim Allen',
-        'genres': 'Documentary',
-        'lead_actors': ['Tom Hanks', 'Tim Allen'],
-        'duration': 85,
-        'description': 'This behind-the-scenes documentary delves into the enduring partnership of Tom Hanks and Tim Allen, exploring their iconic roles in animation and live-action cinema, their creative process, and their lasting impact on Hollywood storytelling.'
-    },
-    {
-        'movieId': 99999999999,
-        'title': 'Test with the same genres',
-        'genres': 'Adventure|Animation|Children|Comedy|Fantasy',
-        'lead_actors': ['xy'],
-        'duration': 96,
-        'description': 'In a magical realm where dreams blend with reality, a young adventurer sets out on a quest to save their kingdom from a spreading darkness. Along the way, they befriend eccentric creatures, face whimsical challenges, and discover the power of courage, laughter, and imagination.'
-    },
-    {
-        'movieId': 11,
-        'title': 'The Lion King (1994)',
-        'genres': 'Animation|Adventure|Drama|Musical|Children',
-        'lead_actors': ['Matthew Broderick', 'James Earl Jones'],
-        'year': 1994,
-        'duration': 88,
-        'description': 'Young lion prince Simba flees his kingdom after the tragic death of his father Mufasa. Growing up in exile, he wrestles with guilt and destiny. With help from new friends, Simba must return to reclaim his throne and save the Pride Lands from tyranny.'
-    },
-    {
-        'movieId': 12,
-        'title': 'The Shawshank Redemption (1994)',
-        'genres': 'Drama|Crime',
-        'lead_actors': ['Tim Robbins', 'Morgan Freeman'],
-        'year': 1994,
-        'duration': 142,
-        'description': 'Wrongfully convicted banker Andy Dufresne forms an unlikely friendship with fellow inmate Red. Over decades in Shawshank Prison, Andy retains hope, using his intelligence to uplift others—and plan an ingenious escape that will change everything.'
-    },
-    {
-        'movieId': 13,
-        'title': 'Inception (2010)',
-        'genres': 'Action|Adventure|Sci-Fi|Thriller',
-        'lead_actors': ['Leonardo DiCaprio', 'Joseph Gordon-Levitt'],
-        'year': 2010,
-        'duration': 148,
-        'description': 'A skilled thief enters people’s dreams to steal secrets. When offered a chance to erase his criminal record, he must instead plant an idea in a target’s mind—an “inception”—while navigating shifting dreamscapes and inner demons.'
-    },
-    {
-        'movieId': 14,
-        'title': 'The Grand Budapest Hotel (2014)',
-        'genres': 'Comedy|Drama|Adventure',
-        'lead_actors': ['Ralph Fiennes', 'Tony Revolori'],
-        'year': 2014,
-        'duration': 99,
-        'description': 'The legendary concierge Gustave H. and lobby boy Zero become unlikely partners in a madcap adventure involving a stolen Renaissance painting, a family inheritance feud—and the looming threat of war in 1930s Europe.'
-    },
-    {
-        'movieId': 15,
-        'title': 'La La Land (2016)',
-        'genres': 'Romance|Drama|Musical',
-        'lead_actors': ['Ryan Gosling', 'Emma Stone'],
-        'year': 2016,
-        'duration': 128,
-        'description': 'Aspiring actress Mia and jazz musician Sebastian fall in love while chasing their dreams in Los Angeles. As their artistic ambitions rise, so do the challenges of balancing romance, career, and sacrifice.'
-    }
-])

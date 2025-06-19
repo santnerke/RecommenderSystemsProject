@@ -2,15 +2,16 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-def recommend_movies_by_description(movie_id, movies_df, top_k=5):
+def recommend_movies_by_description(movie_id, movies_list, top_k=5):
     # Get all descriptions and titles from dataframe
-    descriptions = movies_df['description'].tolist()
-    titles = movies_df['title'].tolist()
+    descriptions = [m.get('plot_summary') or '' for m in movies_list]
+    titles = [m.get('title') or '' for m in movies_list]
+    ids = [m.get('id') for m in movies_list]
 
     try:
         # Find index of the movie with the given ID
-        query_index = movies_df[movies_df['movieId'] == movie_id].index[0]
-    except IndexError:
+        query_index = ids.index(movie_id)
+    except ValueError:
         print(f"Movie ID {movie_id} not found.")
         return []
 
