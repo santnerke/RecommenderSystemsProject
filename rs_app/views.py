@@ -26,19 +26,19 @@ def recommend(request):
         'id', 'title', 'genres', 'actors', 'release_year', 'duration', 'plot_summary'
     ))
 
-    #genre_recs = recommend_movies_by_genre(movie.id, movies_list)
-    #actor_recs = recommend_movies_by_lead_actors(movie.id, movies_list)
+    genre_recs = recommend_movies_by_genre(movie.id, movies_list)
+    actor_recs = recommend_movies_by_lead_actors(movie.id, movies_list)
     desc_recs = recommend_movies_by_description(movie.id, movies_list)
     embe_recs = recommend_movies_by_embedding(movie.id, movies_list)
-    #year_recs = recommend_movies_by_year(movie.id, movies_list)
-    #dur_recs = recommend_movies_by_duration(movie.id, movies_list)
+    year_recs = recommend_movies_by_year(movie.id, movies_list)
+    dur_recs = recommend_movies_by_duration(movie.id, movies_list)
 
     return render(request, 'rs_app/recommend.html', {
         'movie': movie,
-        #'genre_recommendations': genre_recs,
-        #'actor_recommendations': actor_recs,
+        'genre_recommendations': genre_recs,
+        'actor_recommendations': actor_recs,
         'description_recommendations': desc_recs,
         'embedding_recommendations': embe_recs,
-        #'year_recommendations': year_recs,
-        #'duration_recommendations': dur_recs,
+        'year_recommendations': year_recs,
+        'duration_recommendations': dur_recs,
     })
