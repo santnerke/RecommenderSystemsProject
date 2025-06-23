@@ -2,107 +2,209 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <title>{{ movie.title }}</title>
-        <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 1rem;
-            background-color: #fafafa;
-            color: #333;
-        }
-        h1 {
-            font-weight: 700;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #222;
-            text-align: left;
-        }
-        .section {
-            margin-bottom: 3rem;
-        }
-        h2 {
-            font-weight: 600;
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 0.8rem;
-            color: #444;
-        }
-        h3 {
-            font-weight: 600;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.4rem;
-            color: #444;
-        }
-        ul.recommendation-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            justify-content: center;
-        }
-        li.recommendation-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 150px;
-            background: #fff;
-            border-radius: 8px;
-            padding: 0.75rem;
-            box-shadow: 0 4px 8px rgb(0 0 0 / 0.05);
-            transition: box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-        li.recommendation-item:hover {
-            box-shadow: 0 8px 16px rgb(0 0 0 / 0.1);
-        }
-        li.recommendation-item img {
-            max-width: 100%;
-            border-radius: 4px;
-            margin-bottom: 0.6rem;
-            object-fit: cover;
-        }
-        .recommendation-title {
-            font-size: 1rem;
-            font-weight: 600;
-            text-align: center;
-            color: #444;
-            user-select: none;
-        }
-        .no-recommendations {
-            font-style: italic;
-            color: #888;
-            text-align: center;
-            padding: 1rem 0;
-        }
-    </style>
-</head>
+<style>
+  body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    background: #000;
+    color: #fff;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+.movie-header-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  box-shadow: 0 0 30px rgba(0, 237, 225, 0.2);
+}
+
+.movie-header-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to left, rgba(0,0,0,0), rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+  z-index: 1;
+  filter: blur(80px);
+}
+
+.movie-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 2rem;
+}
+  a.back-link {
+    color: #00EDE1;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 2rem;
+    transition: color 0.3s ease;
+  }
+
+  a.back-link:hover {
+    color: #00bdb7;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #00EDE1;
+    text-align: left;
+  }
+
+  .movie-header {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .movie-poster {
+    flex-shrink: 0;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00EDE1AA;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .movie-poster:hover {
+    box-shadow: 0 0 35px #00EDE1FF;
+  }
+
+  .movie-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .movie-details p {
+    margin: 0;
+  }
+
+  .movie-details p strong {
+    color: #00EDE1;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #00EDE1;
+    border-bottom: 2px solid #00EDE1;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    color: #00EDE1;
+    border-bottom: 1px solid #222;
+    padding-bottom: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .section {
+    margin-bottom: 3rem;
+  }
+
+  ul.recommendation-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+  }
+
+  li.recommendation-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    background: #111;
+    border-radius: 8px;
+    padding: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 237, 225, 0.2);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+
+  li.recommendation-item:hover {
+    box-shadow: 0 8px 16px rgba(0, 237, 225, 0.4);
+  }
+
+  li.recommendation-item img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    object-fit: cover;
+    box-shadow: 0 0 10px #00EDE144;
+    transition: box-shadow 0.3s ease;
+  }
+
+  li.recommendation-item img:hover {
+    box-shadow: 0 0 20px #00EDE1;
+  }
+
+  .recommendation-title {
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: auto;
+    color: #fff;
+    user-select: none;
+  }
+
+  .no-recommendations {
+    font-style: italic;
+    color: #666;
+    text-align: center;
+    padding: 1rem 0;
+  }
+</style>
+
+
 <body>
-{% load static %}
-<a href="{% url 'index' %}" class="back-link">&larr; Back to movie selection</a>
+  {% load static %}
+  <a href="{% url 'index' %}" class="back-link">&larr; Back to movie selection</a>
+<div class="movie-header-wrapper">
+  <div class="movie-header-bg"></div>
 
-<h1>{{ movie.title }}</h1>
-<img src="{% static 'movie_posters/' %}{{ movie.id }}.jpg" alt="{{ movie.title }} poster"
-     style="max-width: 300px; margin-bottom: 1rem;"/>
-<p class="genres"><strong>Genres: </strong>{{ movie.genres|join:", "}}</p>
-<p><strong>Lead actors:</strong> {{ movie.actors|slice:":3"|join:", " }}</p>
-<p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
-<p><strong>Release year:</strong> {{ movie.release_year }}</p>
-<p><strong>Description: </strong>{{ movie.plot_summary }}</p>
-<br />
-<br />
+  <div class="movie-header">
+    <img
+      src="{% static 'movie_posters/' %}{{ movie.id }}.jpg"
+      alt="{{ movie.title }} poster"
+      class="movie-poster"
+    />
 
+    <div class="movie-details">
+      <h1>{{ movie.title }}</h1>
+      <p class="genres"><strong>Genres:</strong> {{ movie.genres|join:", "}}</p>
+      <p><strong>Lead actors:</strong> {{ movie.actors|slice:":3"|join:", " }}</p>
+      <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
+      <p><strong>Release year:</strong> {{ movie.release_year }}</p>
+      <p><strong>Description:</strong> {{ movie.plot_summary }}</p>
+    </div>
+  </div>
+</div>
 
-<h2>Recommendations</h2>
+  <br /><br />
+
+ <h2>We recommend you</h2>
+</body>
 
 <div class="section">
-    <h3>Recommendations by Genre</h3>
+    <h3>Recommendations by genre</h3>
     {% if genre_recommendations %}
     <ul class="recommendation-list">
         {% for m in genre_recommendations %}
