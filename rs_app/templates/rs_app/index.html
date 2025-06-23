@@ -1,86 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Movie Recommendation</title>
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --hover-color: #4338ca;
-            --background-color: #f9fafb;
-            --text-color: #111827;
-            --input-border: #d1d5db;
-            --radius: 6px;
-        }
+  <meta charset="UTF-8" />
+  <title>Movie Recommendation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+      background: black;
+      color: white;
+    }
 
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+    .background-carousel {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
 
-        form {
-            background: white;
-            padding: 24px;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+    .background-carousel img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      z-index: 0;
+    }
 
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-        }
+    .background-carousel img.active {
+      opacity: 1;
+      z-index: 1;
+    }
 
-        select {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid var(--input-border);
-            border-radius: var(--radius);
-            margin-bottom: 16px;
-        }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+      backdrop-filter: blur(40px);
+      z-index: 2;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.5s ease;
-        }
+    .content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        button:hover {
-            background-color: var(--hover-color);
-        }
-    </style>
+    .form-card {
+      background-color: rgba(17, 17, 17, 0.85);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 237, 225, 0.15);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #00EDE1;
+    }
+
+    label {
+      font-weight: 400;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #00EDE1;
+      text-align: left;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      background-color: #111;
+      color: #fff;
+      border: 1px solid #00EDE1;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      background-color: #00EDE1;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00c8c1;
+    }
+  </style>
 </head>
 <body>
-    <h1>Select a movie to get recommendations</h1>
-    <form method="get" action="{% url 'recommend' %}">
+
+  <!-- Background Poster Carousel -->
+  <div class="background-carousel" id="carousel">
+    <img src="https://image.tmdb.org/t/p/original/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg" class="active" alt="Poster 1" />
+    <img src="https://image.tmdb.org/t/p/original/9O1Iy9od7uIbG5Y3YwGdfLTL0Xw.jpg" alt="Poster 2" />
+    <img src="https://image.tmdb.org/t/p/original/3h1JZGDhZ8nzxdgvkxha0qBqi05.jpg" alt="Poster 3" />
+  </div>
+
+  <!-- Gradient Overlay -->
+  <div class="overlay"></div>
+
+  <!-- Foreground Content -->
+  <div class="content">
+    <div class="form-card">
+      <h1>Select a movie to get recommendations</h1>
+      <form method="get" action="{% url 'recommend' %}">
         <label for="movie-select">Choose movie:</label>
         <select name="movie_id" id="movie-select" required>
-            <option value="" disabled selected>--- Select movie ---</option>
-            {% for movie in movies %}
-                <option value="{{ movie.id }}">{{ movie.title }}</option>
-            {% endfor %}
+          <option value="" disabled selected>--- Select movie ---</option>
+          {% for movie in movies %}
+            <option value="{{ movie.id }}">{{ movie.title }}</option>
+          {% endfor %}
         </select>
         <button type="submit">Recommend similar movies</button>
-    </form>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('#carousel img');
+    let current = 0;
+
+    setInterval(() => {
+      images[current].classList.remove('active');
+      current = (current + 1) % images.length;
+      images[current].classList.add('active');
+    }, 5000); // change every 5 seconds
+  </script>
+
 </body>
 </html>
+
