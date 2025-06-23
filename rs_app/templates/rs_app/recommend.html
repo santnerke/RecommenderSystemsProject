@@ -125,8 +125,10 @@
     <ul class="recommendation-list">
         {% for m in actor_recommendations %}
         <li class="recommendation-item">
-            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
-            <span class="recommendation-title">{{ m.title }}</span>
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
@@ -141,8 +143,10 @@
     <ul class="recommendation-list">
         {% for m in description_recommendations %}
         <li class="recommendation-item">
-            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
-            <span class="recommendation-title">{{ m.title }}</span>
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
@@ -157,8 +161,10 @@
     <ul class="recommendation-list">
         {% for m in embedding_recommendations %}
         <li class="recommendation-item">
-            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
-            <span class="recommendation-title">{{ m.title }}</span>
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
@@ -173,8 +179,10 @@
     <ul class="recommendation-list">
         {% for m in duration_recommendations %}
         <li class="recommendation-item">
-            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
-            <span class="recommendation-title">{{ m.title }}</span>
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
@@ -189,8 +197,10 @@
     <ul class="recommendation-list">
         {% for m in year_recommendations %}
         <li class="recommendation-item">
-            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
-            <span class="recommendation-title">{{ m.title }}</span>
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
@@ -205,8 +215,10 @@
     <ul class="recommendation-list">
         {% for m in poster_recommendations %}
         <li class="recommendation-item">
-            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
-            <span class="recommendation-title">{{ m.title }}</span>
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
         </li>
         {% endfor %}
     </ul>
