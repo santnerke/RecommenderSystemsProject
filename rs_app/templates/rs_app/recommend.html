@@ -36,6 +36,20 @@
         .movie-description {
             white-space: pre-wrap;
         }
+        a.poster-link {
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        a.poster-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+</style>
+
     </style>
 </head>
 <body>
@@ -44,7 +58,7 @@
 
     <h1>{{ movie.title }}</h1>
     <img src="{% static 'movie_posters/' %}{{ movie.id }}.jpg" alt="{{ movie.title }} poster" style="max-width: 300px; margin-bottom: 1rem;" />
-    <p class="genres">Genres: {{ movie.genres }}</p>
+    <p class="genres">Genres: {{ movie.genres|join:", " }}</p>
     <p><strong>Lead actors:</strong> {{ movie.actors |join:", " }}</p>
     <div class="movie-description">
         <p>{{ movie.plot_summary }}</p>
@@ -55,8 +69,10 @@
         <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
             {% for m in genre_recommendations %}
                 <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – shared genres: {{ m.shared_genres }}</span>
+                    <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                        <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                        <span>{{ m.title }} – shared genres: {{ m.shared_genres }}</span>
+                    </a>
                 </li>
             {% empty %}
                 <li>No recommendations found.</li>

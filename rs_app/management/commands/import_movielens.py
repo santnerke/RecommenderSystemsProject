@@ -32,7 +32,7 @@ class Command(BaseCommand):
                     id=movie_id,
                     defaults={
                         'title': movielens.get("title"),
-                        'genres': movielens.get("genres", ""),  # fallback if needed
+                        'genres': movielens.get("genres"),  # fallback if needed
                         'release_year': movielens.get("releaseYear"),
                         'actors': movielens.get("actors"),
                         'plot_summary': movielens.get("plotSummary"),
