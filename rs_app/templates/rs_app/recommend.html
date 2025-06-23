@@ -1,167 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>{{ movie.title }}</title>
-    <style>
+        <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 700px;
             margin: 2rem auto;
             padding: 1rem;
+            background-color: #fafafa;
+            color: #333;
         }
         h1 {
-            margin-bottom: 0;
-        }
-        .genres {
-            font-style: italic;
-            color: #555;
-            margin-top: 0;
-            margin-bottom: 1rem;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #222;
+            text-align: left;
         }
         .section {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
-        ul {
+        h2 {
+            font-weight: 600;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.8rem;
+            color: #444;
+        }
+        h3 {
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.4rem;
+            color: #444;
+        }
+        ul.recommendation-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
             list-style: none;
-            padding-left: 0;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
         }
-        li {
-            margin-bottom: 0.4rem;
-        }
-        .back-link {
-            margin-top: 2rem;
-            display: block;
-        }
-        .movie-description {
-            white-space: pre-wrap;
-        }
-        a.poster-link {
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        a.poster-link:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        li.recommendation-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 0.75rem;
+            box-shadow: 0 4px 8px rgb(0 0 0 / 0.05);
+            transition: box-shadow 0.3s ease;
             cursor: pointer;
         }
-</style>
-
+        li.recommendation-item:hover {
+            box-shadow: 0 8px 16px rgb(0 0 0 / 0.1);
+        }
+        li.recommendation-item img {
+            max-width: 100%;
+            border-radius: 4px;
+            margin-bottom: 0.6rem;
+            object-fit: cover;
+        }
+        .recommendation-title {
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            color: #444;
+            user-select: none;
+        }
+        .no-recommendations {
+            font-style: italic;
+            color: #888;
+            text-align: center;
+            padding: 1rem 0;
+        }
     </style>
 </head>
 <body>
-    {% load static %}
-    <a href="{% url 'index' %}" class="back-link">&larr; Back to movie selection</a>
+{% load static %}
+<a href="{% url 'index' %}" class="back-link">&larr; Back to movie selection</a>
 
-    <h1>{{ movie.title }}</h1>
-    <img src="{% static 'movie_posters/' %}{{ movie.id }}.jpg" alt="{{ movie.title }} poster" style="max-width: 300px; margin-bottom: 1rem;" />
-    <p class="genres">Genres: {{ movie.genres|join:", " }}</p>
-    <p><strong>Lead actors:</strong> {{ movie.actors |join:", " }}</p>
-    <div class="movie-description">
-        <p>{{ movie.plot_summary }}</p>
-    </div>
+<h1>{{ movie.title }}</h1>
+<img src="{% static 'movie_posters/' %}{{ movie.id }}.jpg" alt="{{ movie.title }} poster"
+     style="max-width: 300px; margin-bottom: 1rem;"/>
+<p class="genres"><strong>Genres: </strong>{{ movie.genres|join:", "}}</p>
+<p><strong>Lead actors:</strong> {{ movie.actors|slice:":3"|join:", " }}</p>
+<p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
+<p><strong>Release year:</strong> {{ movie.release_year }}</p>
+<p><strong>Description: </strong>{{ movie.plot_summary }}</p>
+<br />
+<br />
 
-    <div class="section">
-        <h2>Recommendations by Genre</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in genre_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
-                        <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                        <span>{{ m.title }} – shared genres: {{ m.shared_genres }}</span>
-                    </a>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
 
-    <div class="section">
-        <h2>Recommendations by Lead Actors</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in actor_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – shared actors: {{ m.shared_actors }}</span>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<h2>Recommendations</h2>
 
-    <div class="section">
-        <h2>Recommendations by Description Similarity</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in description_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – similarity score: {{ m.similarity|floatformat:2 }}</span>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="section">
+    <h3>Recommendations by Genre</h3>
+    {% if genre_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in genre_recommendations %}
+        <li class="recommendation-item">
+            <a href="{% url 'recommend' %}?movie_id={{ m.id }}" class="poster-link">
+                <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
+                <span class="recommendation-title">{{ m.title }}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
 
-    <div class="section">
-        <h2>Recommendations by Embedding Similarity</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in embedding_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – similarity score: {{ m.similarity|floatformat:2 }}</span>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="section">
+    <h3>Recommendations by Lead Actors</h3>
+    {% if actor_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in actor_recommendations %}
+        <li class="recommendation-item">
+            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+            <span class="recommendation-title">{{ m.title }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
 
-    <div class="section">
-        <h2>Recommendations by Duration</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in duration_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – duration difference: {{ m.duration_diff }} min</span>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="section">
+    <h3>Recommendations by Description Similarity</h3>
+    {% if description_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in description_recommendations %}
+        <li class="recommendation-item">
+            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+            <span class="recommendation-title">{{ m.title }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
 
-    <div class="section">
-        <h2>Recommendations by Release Year</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in year_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – same year: {{ m.release_year }}</span>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="section">
+    <h3>Recommendations by Embedding Similarity</h3>
+    {% if embedding_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in embedding_recommendations %}
+        <li class="recommendation-item">
+            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+            <span class="recommendation-title">{{ m.title }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
 
-    <div class="section">
-        <h2>Recommendations by Poster Color</h2>
-        <ul style="display: flex; gap: 2rem; list-style: none; padding: 0;">
-            {% for m in poster_recommendations %}
-                <li style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" style="max-width: 150px; margin-bottom: 0.5rem;" />
-                    <span>{{ m.title }} – color: {{ m.color }}</span>
-                </li>
-            {% empty %}
-                <li>No recommendations found.</li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="section">
+    <h3>Recommendations by Duration</h3>
+    {% if duration_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in duration_recommendations %}
+        <li class="recommendation-item">
+            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+            <span class="recommendation-title">{{ m.title }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h3>Recommendations by Release Year</h3>
+    {% if year_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in year_recommendations %}
+        <li class="recommendation-item">
+            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+            <span class="recommendation-title">{{ m.title }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <h3>Recommendations by Poster Color</h3>
+    {% if poster_recommendations %}
+    <ul class="recommendation-list">
+        {% for m in poster_recommendations %}
+        <li class="recommendation-item">
+            <img src="{% static 'movie_posters/' %}{{ m.id }}.jpg" alt="{{ m.title }} poster" />
+            <span class="recommendation-title">{{ m.title }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-recommendations">No recommendations found.</p>
+    {% endif %}
+</div>
+
 </body>
 </html>
