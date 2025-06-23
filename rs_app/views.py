@@ -6,6 +6,7 @@ from similarity_strategies.descriptionMatching import recommend_movies_by_descri
 from similarity_strategies.embeddingBased import recommend_movies_by_embedding
 from similarity_strategies.releaseYearMatching import recommend_movies_by_year
 from similarity_strategies.durationBased import recommend_movies_by_duration
+from similarity_strategies.dominantPosterColorMatching import recommend_by_poster_color
 
 def index(request):
     movies = Movie.objects.all().values('id', 'title').order_by('title')
@@ -32,6 +33,7 @@ def recommend(request):
     embe_recs = recommend_movies_by_embedding(movie.id, movies_list)
     year_recs = recommend_movies_by_year(movie.id, movies_list)
     dur_recs = recommend_movies_by_duration(movie.id, movies_list)
+    pos_recs = recommend_by_poster_color(movie.id, movies_list)
 
     return render(request, 'rs_app/recommend.html', {
         'movie': movie,
@@ -41,4 +43,5 @@ def recommend(request):
         'embedding_recommendations': embe_recs,
         'year_recommendations': year_recs,
         'duration_recommendations': dur_recs,
+        'poster_recommendations': pos_recs,
     })

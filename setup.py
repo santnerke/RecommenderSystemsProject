@@ -9,5 +9,6 @@ django.setup()
 # Run management commands
 #call_command('makemigrations')
 #call_command('migrate')
+#call_command('extract_dominant_colors')
 call_command('import_movielens', 'data/movie_information')
 call_command('runserver')
